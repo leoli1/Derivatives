@@ -219,10 +219,16 @@ def PackPowerBlocks(expression):
             before_el = new_expressions[len(new_expressions)-1]
             after_el = expression.expressions[i+1]
             
+            exp = after_el
+            
+            if isinstance(after_el, Expression.OperatorElement):
+                exp = Expression.ExpressionBlock(after_el,expression.expressions[i+2])
+                i += 1
+            
             new_expressions.pop(len(new_expressions)-1)
             
             powerBlock.append(before_el)
-            powerBlock.append(after_el)
+            powerBlock.append(exp)
             new_expressions.append(powerBlock)
             i += 1
         else:
@@ -248,13 +254,18 @@ def PackQuotientBlocks(expression):
             quotientBlock = Expression.QuotientBlock()
            # before_el = expression.expressions[i-1]
             before_el = new_expressions[len(new_expressions)-1]
-            after_el = Expression.ExpressionBlock(expression.expressions[i+1])
-            #after_el = expression.expressions[i+1]
+            after_el = expression.expressions[i+1]
+            denom = Expression.ExpressionBlock(after_el)
+            
+            
+            if isinstance(after_el, Expression.OperatorElement):
+                denom = Expression.ExpressionBlock(after_el,expression.expressions[i+2])
+                i += 1
             
             new_expressions.pop(len(new_expressions)-1)
             
             quotientBlock.append(before_el)
-            quotientBlock.append(after_el)
+            quotientBlock.append(denom)
             new_expressions.append(quotientBlock)
             i += 1
         else:
